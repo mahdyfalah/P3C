@@ -110,12 +110,13 @@ if __name__ == "__main__":
     # Some random test data, load here the dataset that you want to use
   
     
-    X, y = make_blobs(n_samples=50,
-                      n_features=6,
+    X, y = make_blobs(n_samples=100,
+                      n_features=3,
                       centers=3,
                       cluster_std=0.1,
+                      random_state=123
                       )
-    
+    """
     # Load Data
     data = np.genfromtxt('scale-d-10d.csv', delimiter=' ')
     X = data[:300,:10]
@@ -127,7 +128,7 @@ if __name__ == "__main__":
 
    
 
-    """
+    
     test_data = np.array ([[0.15, 0.30, 0.00, 0.80], #c1
                         [0.12, 0.29, 0.35, 0.69], #c1
                         [0.00, 0.45, 0.61, 0.27], #c1
@@ -158,7 +159,7 @@ if __name__ == "__main__":
     print("pred_unique: ", set(pred.tolist()))
     print("Count: ", Counter(pred.tolist()))
     np.set_printoptions(threshold=np.inf)
-    #print("label:", pred)
+    print("label:", pred)
     nmi = normalized_mutual_info_score(pred, y)
     print(f"NMI: {nmi:.4f}")
     pred_and_y = np.concatenate([pred[:,None],y[:,None]],axis=1)
