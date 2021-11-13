@@ -74,7 +74,6 @@ def run_elki_P3C(X, poisson):
                      "-parser.colsep", ",",
                      "-p3c.threshold", str(poisson)
                     ]
-    print ("arg_list:", arg_list)
     predicted_labels = run_elki_clustering(arg_list, X)
     return predicted_labels
 
