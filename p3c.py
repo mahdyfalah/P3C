@@ -349,14 +349,18 @@ class P3C:
         '''Computes the fuzzy membership matrix using the support set of cores and cluster centers.
         Then it assignes unassigned points to the closest cluster core using Mahalanobis distance'''
         
-        n = self._X.shape[0]
-        k = len(self.cluster_centers_)
+        n = self._X.shape[0] #number of data points
+        k = len(self.cluster_centers_) #number of clusters
         
-        self._fuzzy_membership_matrix = np.zeros((n, k))
+        self._fuzzy_membership_matrix = np.zeros((n, k)) #start fuzzy membership with an n*k array of zeros
+        
         for i in range(n):
             for l in range(k):
-                if (any(np.array_equal(self._X[i], x) for x in  self._support_set_of_cores[l])):                       
+                #for each point that belong to support set of a cluster assign 1 to fuzzy matrix
+                if (any(np.array_equal(self._X[i], x) for x in  self._support_set_of_cores[l])):
+                    
                     self._fuzzy_membership_matrix[i][l] = 1
+        #compute fraction of data points that have that point in their support set           
         fraction_matrix = np.sum(self._fuzzy_membership_matrix, axis=1)/k
         fraction_matrix = fraction_matrix.reshape(n,1)
         self._fuzzy_membership_matrix = np.multiply(self._fuzzy_membership_matrix, fraction_matrix) 
