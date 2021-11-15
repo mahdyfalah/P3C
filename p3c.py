@@ -387,6 +387,7 @@ class P3C:
           For each data point compute the probability of belonging to each projected cluster using Expectation 
           Maximization(EM)algorithm.'''
 
+        #Ignore EM warning for finding clusters with no points assigned. This can be the case by design of P3C.
         warnings.filterwarnings("ignore", category=ConvergenceWarning)
         gm = GaussianMixture(n_components=self._fuzzy_membership_matrix.shape[1]).fit(self._fuzzy_membership_matrix)
         self.labels_ = gm.predict(self._fuzzy_membership_matrix)
