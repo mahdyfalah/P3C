@@ -420,10 +420,9 @@ class P3C:
                                 cluster_mean, cluster_cov_inv)
                 distances.append(maha_distance)
 
-            # Compute distance threshold for outlier detection, OR IS IT JUST alpha???
-            #threshold = chisquare (self._X[labels_array==i].T.shape[0])
+            # Compute distance threshold for outlier detection
             threshold = stats.chi2.ppf(1-self._alpha, self._X[labels_array==i].T.shape[0])
-            #threshold = stats.chi2.ppf(self._alpha, self._X[labels_array==i].T.shape[0])
+            # Check distance
             outlier_indx = np.where(distances > threshold)[0].tolist()
             # Get original data index for outlier
             cluster_data = self._X[labels_array==i]
