@@ -400,15 +400,16 @@ class P3C:
 
         cluster_outlier = []
         labels_array = np.array(self.labels_)
-        #warnings.filterwarnings("ignore", category=RuntimeWarning)
+        warnings.filterwarnings("ignore", category=RuntimeWarning)
         # Loop through cluster cores
         for i in range(max(self.labels_)):
             outlier_list = []
             # Compute Covarianve matrix for each cluster
-            cluster_cov = np.cov(self._X[labels_array==i].T)
+            cluster_cov = np.cov(self._X[labels_array==i].T)   
+            # break outlier detecion on singular matrix
+            if np.linalg.cond(cluster_cov > 1000):
+                return
             # Compute inverse of covariance matrix
-            #if np.linalg.cond(cluster_cov > 1000):
-            #    return
             cluster_cov_inv = np.linalg.inv(cluster_cov)
             # Computer mean of cluster core
             cluster_mean = np.mean(self._X[labels_array==i] , axis=0)

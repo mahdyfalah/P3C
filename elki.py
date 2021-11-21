@@ -76,6 +76,19 @@ def run_elki_P3C(X, poisson):
     predicted_labels = run_elki_clustering(arg_list, X)
     return predicted_labels
 
+def run_elki_predecon(X, epsilon, minpts, delta):
+    # You can read of the names of the parameters for the algorithm from the elki GUI or the java code
+    arg_list = ["java", "-cp", ELKI_JAR, "de.lmu.ifi.dbs.elki.application.KDDCLIApplication",
+                    "-algorithm", "clustering.subspace.PreDeCon",
+                    "-dbc.in", DATA_FILE_NAME,
+                    "-parser.colsep", ",",
+                    "-dbscan.epsilon", str(epsilon),
+                    "-dbscan.minpts", str(minpts),
+                    "-predecon.delta", str(delta),
+                    ]
+    predicted_labels = run_elki_clustering(arg_list, X)
+    return predicted_labels
+
 def run_elki_subclu(X, epsilon, minpts):
     # You can read of the names of the parameters for the algorithm from the elki GUI or the java code
     arg_list = ["java", "-cp", ELKI_JAR, "de.lmu.ifi.dbs.elki.application.KDDCLIApplication",
@@ -114,17 +127,18 @@ def run_elki_kmeans(X, k):
 if __name__ == "__main__":
     # Some random test data, load here the dataset that you want to use
     X, y = make_blobs(n_samples=100,
-                      n_features=3,
+                      n_features=30,
                       centers=3,
                       cluster_std=0.1,
                       random_state=123
                       )
 
     print("Run elki")
-    pred = run_elki_kmeans(X, k=3)
-    #pred = run_elki_dbscan(X, epsilon=0.5, minpts=3)
+    #pred = run_elki_kmeans(X, k=3)
+    #pred = run_elki_dbscan(X, epsilon=1, minpts=3)
     #pred = run_elki_P3C (X, poisson=1e-100)
     #pred = run_elki_subclu(X, epsilon=0.5, minpts=3)
+    pred = run_elki_predecon(X, epsilon=1, minpts=3, delta=1e-5)
     print("pred_unique: ", set(pred.tolist()))
     print("Count: ", Counter(pred.tolist()))
     nmi = normalized_mutual_info_score(pred, y)
